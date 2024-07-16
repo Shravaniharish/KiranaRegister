@@ -23,11 +23,15 @@ public class TransactionServiceImpl implements TransactionService {
         this.transactionDAO = transactionDAO;
     }
 
+    /**
+     * lists all transactions along with their specific details
+     * @return
+     */
     @Cacheable(value = "Transaction")
     @Override
     public List<Transaction> getAllTransactions() {
         try{
-            return transactionDAO.getAllTransactions();
+            return (List<Transaction>) transactionDAO.getAllTransactions();
         }
         catch (Exception e){
             System.out.println("Exception is: " + e);
@@ -35,36 +39,65 @@ public class TransactionServiceImpl implements TransactionService {
         return null;
     }
 
+    /**
+     * displays details of transaction on specifying transaction details
+     * @param id
+     * @return
+     */
     @Cacheable(value = "Transaction")
     @Override
     public Optional<Transaction> getTransactionById(String id) {
         return transactionDAO.getTransactionById(id);
     }
 
+    /**
+     * displays list of transactions for a specified transaction type
+     * @param type
+     * @return
+     */
     @Cacheable(value = "Transaction")
     @Override
-    public List<Transaction> getTransactionsByType(String Type) {
-        return transactionDAO.getTransactionsByType(Type);
+    public List<Transaction> getTransactionsByType(String type) {
+        return transactionDAO.getTransactionsByType(type);
     }
 
+    /**
+     * displays list of transactions for a specified transaction status
+     * @param status
+     * @return
+     */
     @Cacheable(value = "Transaction")
     @Override
     public List<Transaction> getTransactionByStatus(String status) {
         return transactionDAO.getTransactionByStatus(status);
     }
 
+    /**
+     * displays list of transactions for a specified transaction date
+     * @param date
+     * @return
+     */
     @Cacheable(value = "Transaction")
     @Override
     public List<Transaction> getTransactionByDate(String date) {
         return transactionDAO.getTransactionByDate(date);
     }
 
+    /**
+     * displays all transaction that were carried out between the startDate and endDate
+     * @param startDate
+     * @param endDate
+     */
     @Cacheable(value = "Transaction")
     @Override
     public List<Transaction> getTransactionByDateBetween(String startDate, String endDate) {
         return transactionDAO.getTransactionByDateBetween(startDate, endDate);
     }
 
+    /**
+     * saves transaction into the database
+     * @param transactionRequest
+     */
     @CachePut(value = "Transaction")
     @Override
     public Transaction saveTransaction(TransactionDTO transactionRequest) {
@@ -79,6 +112,10 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionDAO.saveTransaction(transaction);
     }
 
+    /**
+     * deletes transaction for the specified transaction id
+     * @param id
+     */
     @CacheEvict(value = "Transaction")
     @Override
     public String deleteTransaction(String id) {

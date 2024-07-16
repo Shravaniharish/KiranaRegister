@@ -17,20 +17,45 @@ public class StoreDAO{
         this.storeRepository = storeRepository;
     }
 
+    /**
+     * Retrieves a list of all stores.
+     *
+     * @return a list of Store entities
+     */
     public List<Store> getAllStore() {
         return storeRepository.findAll() ;
     }
 
+
+    /**
+     * Retrieves a store by its ID.
+     *
+     * @param id the ID of the store to retrieve
+     * @return an Optional containing the store if found, or empty if not found
+     */
     public Optional<Store> getStoreById(String id) {
         return storeRepository.findById(id);
     }
 
+
+    /**
+     * Saves a store.
+     *
+     * @param storeRequest the Store entity to save
+     * @return the saved Store entity
+     */
     public Store saveStore(Store storeRequest) {
 
         return storeRepository.save(storeRequest);
 
     }
 
+
+    /**
+     * Deletes a store by its ID.
+     *
+     * @param id the ID of the store to delete
+     */
     public void deleteStore(String id) {
         storeRepository.deleteById(id);
 

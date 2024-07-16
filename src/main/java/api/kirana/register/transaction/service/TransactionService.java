@@ -12,7 +12,7 @@ public interface TransactionService {
 
     Optional<Transaction> getTransactionById(String id);
 
-    List<Transaction> getTransactionsByType(String Type);
+    List<Transaction> getTransactionsByType(String type);
 
     List<Transaction> getTransactionByStatus(String status);
 

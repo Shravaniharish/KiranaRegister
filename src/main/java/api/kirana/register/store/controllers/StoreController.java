@@ -18,6 +18,11 @@ public class StoreController {
         this.storeService = storeService;
     }
 
+    /**
+     * Retrieves a list of all stores.
+     *
+     * @return a ResponseEntity containing the response with all stores
+     */
     @GetMapping("/getAllStores")
     public ResponseEntity<Response>  getAllStores() {
         Response response = new Response();
@@ -26,6 +31,12 @@ public class StoreController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a store by its ID.
+     *
+     * @param id the ID of the store to retrieve
+     * @return a ResponseEntity containing the response with the store information
+     */
     @GetMapping("/getStoreById")
     public ResponseEntity<Response> getStoreById(@RequestParam String id) {
         Response response = new Response();
@@ -34,6 +45,12 @@ public class StoreController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Saves a new store.
+     *
+     * @param storeRequest the request body containing store information to save
+     * @return a ResponseEntity containing the response with the saved store information
+     */
     @PostMapping("/saveStore")
     public ResponseEntity<Response> saveStore(@RequestBody StoreDTO storeRequest) {
         Response response = new Response();
@@ -42,6 +59,12 @@ public class StoreController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Deletes a store by its ID.
+     *
+     * @param id the ID of the store to delete
+     * @return a ResponseEntity containing the response indicating the deletion status
+     */
     @DeleteMapping("/deleteMapping")
     public ResponseEntity<Response> deleteStore(@RequestParam String id) {
         Response response = new Response();

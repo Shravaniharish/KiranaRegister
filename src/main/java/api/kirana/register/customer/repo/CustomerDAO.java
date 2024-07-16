@@ -16,6 +16,11 @@ public class CustomerDAO  {
 
     }
 
+    /**
+     * Retrieves a list of all customers.
+     *
+     * @return a list of all customers
+     */
     public List<Customer> getAllCustomers() {
         List<Customer> customerList= new ArrayList<>();
         customerList = customerRepo.findAll();
@@ -24,6 +29,12 @@ public class CustomerDAO  {
     }
 
 
+    /**
+     * Retrieves a customer by their ID.
+     *
+     * @param id the ID of the customer
+     * @return an Optional containing the customer if found, or empty if not found
+     */
     public Optional<Customer> getCustomerById(String id) {
         Optional<Customer> customer;
         customer = customerRepo.findById(id);
@@ -32,6 +43,12 @@ public class CustomerDAO  {
     }
 
 
+    /**
+     * Retrieves a customer by their name.
+     *
+     * @param customerName the name of the customer
+     * @return an Optional containing the customer if found, or empty if not found
+     */
     public Optional<Customer> getCustomerByName(String customerName) {
         Optional<Customer> customer;
         customer= customerRepo.findByCustomerName(customerName);
@@ -39,12 +56,22 @@ public class CustomerDAO  {
     }
 
 
+    /**
+     * Saves a new customer.
+     *
+     * @param customerRequest the customer to be saved
+     * @return the saved customer
+     */
     public Customer saveCustomer(Customer customerRequest) {
        return customerRepo.save(customerRequest);
 
     }
 
-
+    /**
+     * Deletes a customer by their ID.
+     *
+     * @param id the ID of the customer to be deleted
+     */
     public void deleteCustomer(String id) {
         customerRepo.deleteById(id);
     }

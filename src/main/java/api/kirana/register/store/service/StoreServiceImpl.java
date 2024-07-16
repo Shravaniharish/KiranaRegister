@@ -18,16 +18,33 @@ public class StoreServiceImpl implements StoreService {
         this.storeDAO = storeDAO;
     }
 
+    /**
+     * Retrieves a list of all stores.
+     *
+     * @return a list of Store entities
+     */
     @Override
     public List<Store> getAllStore() {
         return storeDAO.getAllStore();
     }
 
+    /**
+     * Retrieves a store by its ID.
+     *
+     * @param id the ID of the store to retrieve
+     * @return an Optional containing the store if found, or empty if not found
+     */
     @Override
     public Optional<Store> getStoreById(String id) {
         return storeDAO.getStoreById(id);
     }
 
+    /**
+     * Saves a store.
+     *
+     * @param storeRequest the StoreDTO containing store information to save
+     * @return the saved Store entity
+     */
     @Override
     public Store saveStore(StoreDTO storeRequest) {
         Store store = new Store();
@@ -37,6 +54,12 @@ public class StoreServiceImpl implements StoreService {
         return storeDAO.saveStore(store);
     }
 
+    /**
+     * Deletes a store by its ID.
+     *
+     * @param id the ID of the store to delete
+     * @return a message indicating the deletion status
+     */
     @Override
     public String deleteStore(String id) {
         storeDAO.deleteStore(id);
