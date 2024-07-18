@@ -13,6 +13,4 @@ public class Customer {
     private String phoneNumber;
     private String storeName;
 
-
-
 }
