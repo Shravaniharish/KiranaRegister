@@ -1,8 +1,7 @@
 package api.kirana.register.currencyexchange.controllers;
 
 import api.kirana.register.currencyexchange.service.CurrencyConversionService;
-import api.kirana.register.currencyexchange.service.CurrencyConversionServiceImpl;
-import api.kirana.register.response.Response;
+import api.kirana.register.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +34,10 @@ public class CurrencyConversionController {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/convert")
-    public ResponseEntity<Response> convertCurrency(@RequestParam String id, @RequestParam String baseCurrency, @RequestParam String targetCurrency) {
-        Response response = new Response();
+    public ResponseEntity<ApiResponse> convertCurrency(@RequestParam String id, @RequestParam String baseCurrency, @RequestParam String targetCurrency) {
+        ApiResponse response = new ApiResponse();
         String data =conversionService.convertCurrency(id, baseCurrency, targetCurrency);
         response.setData(data);
-        response.setMessage("conversion rate");
         return new ResponseEntity<>(response , HttpStatus.OK);
 
     }

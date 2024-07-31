@@ -14,7 +14,6 @@ public class ConversionResponse {
     private boolean success;
     private String terms;
     private String privacy;
-    private long timestamp;
     private String date;
     private String base;
     private Map<String, Double> rates;

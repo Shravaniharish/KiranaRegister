@@ -35,7 +35,7 @@ public class SecurityConfig {
 //                .roles("USER")
 //                .build();
 //        return new InMemoryUserDetailsManager(admin, user);
-        return new UserInfoUserDetailsService();
+        return new UsersInfoService();
     }
 
     /**
@@ -60,7 +60,6 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/transactions/**").permitAll()
                         .anyRequest().authenticated()).httpBasic(withDefaults());
         //basic authentication
 
