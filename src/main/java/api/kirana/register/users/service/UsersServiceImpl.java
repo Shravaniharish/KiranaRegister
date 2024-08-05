@@ -1,16 +1,15 @@
 package api.kirana.register.users.service;
+
 import api.kirana.register.users.entity.Users;
 import api.kirana.register.users.models.UsersDTO;
 import api.kirana.register.users.repo.UsersDAO;
+import java.util.Date;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UsersServiceImpl implements UsersService {
@@ -73,7 +72,6 @@ public class UsersServiceImpl implements UsersService {
         user.setRole(userRequest.getPassword());
         user.setRegistrationDate(new Date());
         return userDAO.saveUser(user);
-
     }
 
     /**
@@ -84,7 +82,7 @@ public class UsersServiceImpl implements UsersService {
      */
     @Override
     public String deleteUser(String id) {
-         userDAO.deleteUser(id);
-         return id;
+        userDAO.deleteUser(id);
+        return id;
     }
 }

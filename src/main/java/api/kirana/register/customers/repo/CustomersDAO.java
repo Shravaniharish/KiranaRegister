@@ -1,12 +1,12 @@
 package api.kirana.register.customers.repo;
 
 import api.kirana.register.customers.entity.Customers;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 @Component
 public class CustomersDAO {
     private final CustomersRepo customerRepo;
@@ -14,7 +14,6 @@ public class CustomersDAO {
     @Autowired
     public CustomersDAO(CustomersRepo customerRepo) {
         this.customerRepo = customerRepo;
-
     }
 
     /**
@@ -22,7 +21,6 @@ public class CustomersDAO {
      *
      * @return a list of all customers
      */
-
     public Page<Customers> getAllCustomers(Pageable pageable) {
         return customerRepo.findAll(pageable);
     }
@@ -35,9 +33,7 @@ public class CustomersDAO {
      */
     public Optional<Customers> getCustomerById(String id) {
         return customerRepo.findById(id);
-
     }
-
 
     /**
      * Retrieves a customer by their name.
@@ -47,9 +43,7 @@ public class CustomersDAO {
      */
     public Optional<Customers> getCustomerByName(String customerName) {
         return customerRepo.findByName(customerName);
-
     }
-
 
     /**
      * Saves a new customer.
@@ -58,8 +52,7 @@ public class CustomersDAO {
      * @return the saved customer
      */
     public Customers saveCustomer(Customers customerRequest) {
-       return customerRepo.save(customerRequest);
-
+        return customerRepo.save(customerRequest);
     }
 
     /**

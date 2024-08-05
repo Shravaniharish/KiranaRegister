@@ -17,12 +17,14 @@ public class CurrencyConversionHelper {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Autowired
-    public CurrencyConversionHelper(RestTemplate restTemplate, @Qualifier("redisKVTemplate") RedisTemplate<String, String> redisTemplate) {
+    public CurrencyConversionHelper(
+            RestTemplate restTemplate,
+            @Qualifier("redisKVTemplate") RedisTemplate<String, String> redisTemplate) {
         this.restTemplate = restTemplate;
         this.redisTemplate = redisTemplate;
     }
 
-    public double convertAmount(String baseCurrency, String targetCurrency, double amount){
+    public double convertAmount(String baseCurrency, String targetCurrency, double amount) {
         double conversionRate = getCurrencyConversionRate(baseCurrency, targetCurrency);
         return amount * conversionRate;
     }
@@ -42,7 +44,12 @@ public class CurrencyConversionHelper {
 
         if (response != null && response.getRates().containsKey(targetCurrency)) {
             double conversionRate = response.getRates().get(targetCurrency);
-            redisTemplate.opsForValue().set(redisCurrencyConversionKey, String.valueOf(conversionRate), Duration.ofMinutes(1));
+            redisTemplate
+                    .opsForValue()
+                    .set(
+                            redisCurrencyConversionKey,
+                            String.valueOf(conversionRate),
+                            Duration.ofMinutes(1));
             return conversionRate;
         } else {
             throw new IllegalArgumentException("Invalid currency or API response");
@@ -50,6 +57,7 @@ public class CurrencyConversionHelper {
     }
 
     private String prepareRedisKey(String sourceCurrency, String targetCurrency) {
-        return MessageFormat.format("r:currency_conversion:{0}:{1}", sourceCurrency, targetCurrency);
+        return MessageFormat.format(
+                "r:currency_conversion:{0}:{1}", sourceCurrency, targetCurrency);
     }
 }

@@ -1,9 +1,9 @@
 package api.kirana.register.users.models;
 
 import jakarta.validation.constraints.NotNull;
+import java.util.Date;
 import lombok.Data;
 
-import java.util.Date;
 @NotNull
 @Data
 public class UsersDTO {

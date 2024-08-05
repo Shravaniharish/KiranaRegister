@@ -23,9 +23,6 @@ public class UsersDAO {
      *
      * @return a list of Users
      */
-//    public List<Users> getAllUsers() {
-//        return userRepository.findAll();
-//    }
     public Page<Users> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
@@ -68,6 +65,4 @@ public class UsersDAO {
     public void deleteUser(String userId) {
         userRepository.deleteById(userId);
     }
-
-
 }

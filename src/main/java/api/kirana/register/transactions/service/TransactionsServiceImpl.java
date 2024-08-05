@@ -25,7 +25,10 @@ public class TransactionsServiceImpl implements TransactionsService {
     private final ReportingHelper reportingHelper;
 
     @Autowired
-    public TransactionsServiceImpl(TransactionsDAO transactionDAO, CurrencyConversionHelper currencyConversionHelper, ReportingHelper reportingHelper) {
+    public TransactionsServiceImpl(
+            TransactionsDAO transactionDAO,
+            CurrencyConversionHelper currencyConversionHelper,
+            ReportingHelper reportingHelper) {
         this.transactionDAO = transactionDAO;
         this.currencyConversionHelper = currencyConversionHelper;
         this.reportingHelper = reportingHelper;
@@ -33,14 +36,17 @@ public class TransactionsServiceImpl implements TransactionsService {
 
     /**
      * lists all transactions along with their specific details
+     *
      * @return
      */
     @Override
-    public Page<Transactions> getAllTransactions(Pageable pageable){
+    public Page<Transactions> getAllTransactions(Pageable pageable) {
         return transactionDAO.getAllTransactions(pageable);
     }
+
     /**
      * displays details of transaction on specifying transaction details
+     *
      * @param id
      * @return
      */
@@ -51,6 +57,7 @@ public class TransactionsServiceImpl implements TransactionsService {
 
     /**
      * displays list of transactions for a specified transaction type
+     *
      * @param type
      * @return
      */
@@ -61,6 +68,7 @@ public class TransactionsServiceImpl implements TransactionsService {
 
     /**
      * displays list of transactions for a specified transaction status
+     *
      * @param status
      * @return
      */
@@ -71,6 +79,7 @@ public class TransactionsServiceImpl implements TransactionsService {
 
     /**
      * displays list of transactions for a specified transaction date
+     *
      * @param date
      * @return
      */
@@ -88,6 +97,7 @@ public class TransactionsServiceImpl implements TransactionsService {
 
     /**
      * displays all transaction that were carried out between the startDate and endDate
+     *
      * @param startDate
      * @param endDate
      */
@@ -103,13 +113,16 @@ public class TransactionsServiceImpl implements TransactionsService {
 
     /**
      * saves transaction into the database
+     *
      * @param transactionRequest
      */
     @Override
     public Transactions saveTransaction(TransactionsDTO transactionRequest) {
         Transactions transaction = new Transactions();
         transaction.setCurrency(transactionRequest.getCurrency());
-        transaction.setAmount(currencyConversionHelper.convertAmount(transactionRequest.getCurrency(),"INR",transactionRequest.getAmount()));
+        transaction.setAmount(
+                currencyConversionHelper.convertAmount(
+                        transactionRequest.getCurrency(), "INR", transactionRequest.getAmount()));
         transaction.setType(transactionRequest.getType());
         transaction.setStatus(transactionRequest.getStatus());
         transaction.setCustomerId(transactionRequest.getCustomerId());
@@ -120,6 +133,7 @@ public class TransactionsServiceImpl implements TransactionsService {
 
     /**
      * deletes transaction for the specified transaction id
+     *
      * @param id
      */
     @Override
@@ -129,7 +143,8 @@ public class TransactionsServiceImpl implements TransactionsService {
     }
 
     @Override
-    public Map<String, AggregationResponse> getReports(ReportType reportType, String startDateStr, String endDateStr) {
+    public Map<String, AggregationResponse> getReports(
+            ReportType reportType, String startDateStr, String endDateStr) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate parsedStartDate = LocalDate.parse(startDateStr, formatter);
         LocalDate parsedEndDate = LocalDate.parse(endDateStr, formatter);
@@ -138,13 +153,16 @@ public class TransactionsServiceImpl implements TransactionsService {
 
         switch (reportType) {
             case WEEKLY:
-                aggregations = reportingHelper.getWeeklyAggregations(parsedStartDate, parsedEndDate);
+                aggregations =
+                        reportingHelper.getWeeklyAggregations(parsedStartDate, parsedEndDate);
                 break;
             case MONTHLY:
-                aggregations = reportingHelper.getMonthlyAggregations(parsedStartDate, parsedEndDate);
+                aggregations =
+                        reportingHelper.getMonthlyAggregations(parsedStartDate, parsedEndDate);
                 break;
             case YEARLY:
-                aggregations = reportingHelper.getYearlyAggregations(parsedStartDate, parsedEndDate);
+                aggregations =
+                        reportingHelper.getYearlyAggregations(parsedStartDate, parsedEndDate);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid report type: " + reportType);
@@ -152,6 +170,4 @@ public class TransactionsServiceImpl implements TransactionsService {
 
         return aggregations;
     }
-
-
 }

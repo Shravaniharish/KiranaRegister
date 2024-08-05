@@ -3,16 +3,16 @@ package api.kirana.register.customers.service;
 import api.kirana.register.customers.entity.Customers;
 import api.kirana.register.customers.models.CustomersDTO;
 import api.kirana.register.customers.repo.CustomersDAO;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class CustomersServiceImpl implements CustomersService {
     private final CustomersDAO customerDAO;
+
     @Autowired
     public CustomersServiceImpl(CustomersDAO customerDOA) {
         this.customerDAO = customerDOA;
@@ -39,7 +39,6 @@ public class CustomersServiceImpl implements CustomersService {
         return customerDAO.getCustomerById(id);
     }
 
-
     /**
      * Retrieves a customer by their name.
      *
@@ -50,7 +49,6 @@ public class CustomersServiceImpl implements CustomersService {
     public Optional<Customers> getCustomerByName(String customerName) {
         return customerDAO.getCustomerByName(customerName);
     }
-
 
     /**
      * Saves a new customer.
@@ -76,7 +74,7 @@ public class CustomersServiceImpl implements CustomersService {
      */
     @Override
     public String deleteCustomer(String id) {
-       customerDAO.deleteCustomer(id);
-       return id;
+        customerDAO.deleteCustomer(id);
+        return id;
     }
 }

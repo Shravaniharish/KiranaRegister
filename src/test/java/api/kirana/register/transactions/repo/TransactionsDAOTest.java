@@ -1,6 +1,8 @@
 package api.kirana.register.transactions.repo;
 
 import api.kirana.register.transactions.entity.Transactions;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,28 +15,28 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 @ExtendWith(MockitoExtension.class)
 public class TransactionsDAOTest {
-    @Mock
-    private TransactionsRepo transactionRepo;
+    @Mock private TransactionsRepo transactionRepo;
 
-    @InjectMocks
-    private TransactionsDAO transactionDAO;
+    @InjectMocks private TransactionsDAO transactionDAO;
 
     @Test
-    public void  getAllTransactionsShouldReturnSuccess() {
+    public void getAllTransactionsShouldReturnSuccess() {
         int page = 2;
         int size = 4;
-        List<Transactions> transactions = Arrays.asList(new Transactions(), new Transactions(), new Transactions(), new Transactions());
+        List<Transactions> transactions =
+                Arrays.asList(
+                        new Transactions(),
+                        new Transactions(),
+                        new Transactions(),
+                        new Transactions());
         Page<Transactions> transactionsList = new PageImpl<>(transactions);
         Pageable pageable = PageRequest.of(page, size);
         Mockito.when(transactionRepo.findAll(pageable)).thenReturn(transactionsList);
         Page<Transactions> actualList = transactionDAO.getAllTransactions(pageable);
         Assertions.assertNotNull(actualList);
-        Assertions.assertEquals(transactionsList,actualList);
+        Assertions.assertEquals(transactionsList, actualList);
     }
 
     @Test
@@ -43,10 +45,10 @@ public class TransactionsDAOTest {
         transaction.setId("testId");
         Optional<Transactions> transactionObj = Optional.of(transaction);
         Mockito.when(transactionRepo.findById(transaction.getId())).thenReturn(transactionObj);
-        Optional<Transactions> actualTransaction = transactionDAO.getTransactionById(transaction.getId());
+        Optional<Transactions> actualTransaction =
+                transactionDAO.getTransactionById(transaction.getId());
         Assertions.assertNotNull(actualTransaction);
-        Assertions.assertEquals(transactionObj,actualTransaction);
-
+        Assertions.assertEquals(transactionObj, actualTransaction);
     }
 
     @Test
@@ -67,8 +69,10 @@ public class TransactionsDAOTest {
         transaction.setStatus("success");
         List<Transactions> transactionList = new ArrayList<>();
         transactionList.add(new Transactions());
-        Mockito.when(transactionRepo.findByStatus(transaction.getStatus())).thenReturn(transactionList);
-        List<Transactions> actualList = transactionDAO.getTransactionByStatus(transaction.getStatus());
+        Mockito.when(transactionRepo.findByStatus(transaction.getStatus()))
+                .thenReturn(transactionList);
+        List<Transactions> actualList =
+                transactionDAO.getTransactionByStatus(transaction.getStatus());
         Assertions.assertNotNull(actualList);
         Assertions.assertEquals(transactionList, actualList);
     }
@@ -83,14 +87,17 @@ public class TransactionsDAOTest {
             transaction.setDate(startDate);
             List<Transactions> transactionList = new ArrayList<>();
             transactionList.add(new Transactions());
-            Mockito.when(transactionRepo.findByDateBetween(startDate, endDate)).thenReturn(transactionList);
-            List<Transactions> actualList = transactionDAO.getTransactionByDateBetween(startDate, endDate);
+            Mockito.when(transactionRepo.findByDateBetween(startDate, endDate))
+                    .thenReturn(transactionList);
+            List<Transactions> actualList =
+                    transactionDAO.getTransactionByDateBetween(startDate, endDate);
             Assertions.assertNotNull(actualList);
             Assertions.assertEquals(transactionList, actualList);
         } catch (Exception e) {
             Assertions.fail("Date parsing failed: " + e.getMessage());
         }
     }
+
     @Test
     public void saveTransactionShouldReturnSuccess() {
         Transactions transaction = new Transactions();
@@ -103,9 +110,8 @@ public class TransactionsDAOTest {
         Transactions actualResponse = transactionDAO.saveTransaction(transaction);
         Assertions.assertNotNull(actualResponse);
         Assertions.assertEquals(transaction, actualResponse);
-
-
     }
+
     @Test
     public void deleteTransactionShouldReturnSuccess() {
         String transactionId = "12345";
@@ -113,7 +119,5 @@ public class TransactionsDAOTest {
         // Call the deleteTransaction method on transactionDAO
         transactionDAO.deleteTransaction(transactionId);
         Mockito.verify(transactionRepo, Mockito.times(1)).deleteById(transactionId);
-
     }
-
 }

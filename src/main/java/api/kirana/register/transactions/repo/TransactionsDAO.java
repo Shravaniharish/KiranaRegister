@@ -1,14 +1,13 @@
 package api.kirana.register.transactions.repo;
 
 import api.kirana.register.transactions.entity.Transactions;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @Component
 public class TransactionsDAO {
@@ -51,6 +50,7 @@ public class TransactionsDAO {
 
     /**
      * Retrieves transactions by their status
+     *
      * @param status
      * @return
      */
@@ -58,9 +58,9 @@ public class TransactionsDAO {
         return transactionRepo.findByStatus(status);
     }
 
-
     /**
      * Retrieves transactions that occurred between two dates
+     *
      * @param startDate
      * @param endDate
      * @return
@@ -84,7 +84,7 @@ public class TransactionsDAO {
      *
      * @param id the ID of the transaction to delete
      */
-    public void deleteTransaction(String id){
+    public void deleteTransaction(String id) {
         transactionRepo.deleteById(id);
     }
 }

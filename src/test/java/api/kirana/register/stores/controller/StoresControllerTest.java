@@ -5,6 +5,9 @@ import api.kirana.register.stores.controllers.StoresController;
 import api.kirana.register.stores.entity.Stores;
 import api.kirana.register.stores.models.StoresDTO;
 import api.kirana.register.stores.service.StoresService;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,36 +22,28 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 @ExtendWith(MockitoExtension.class)
 public class StoresControllerTest {
-    @Mock
-    private StoresService storeService;
+    @Mock private StoresService storeService;
 
-    @InjectMocks
-    private StoresController storeController;
+    @InjectMocks private StoresController storeController;
 
     @Test
     public void getAllStoresShouldReturnSuccess() {
         int page = 2;
         int size = 4;
-        List<Stores> stores = Arrays.asList(
-                new Stores(), new Stores(), new Stores(), new Stores()
-        );
+        List<Stores> stores = Arrays.asList(new Stores(), new Stores(), new Stores(), new Stores());
         Page<Stores> storeList = new PageImpl<>(stores);
         Pageable pageable = PageRequest.of(page, size);
         ApiResponse response = new ApiResponse();
         response.setData(storeList);
         Mockito.when(storeService.getAllStore(pageable)).thenReturn(storeList);
-        ResponseEntity<ApiResponse> responseEntity = storeController.getAllStores(page,size);
+        ResponseEntity<ApiResponse> responseEntity = storeController.getAllStores(page, size);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(storeList, responseEntity.getBody().getData());
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-
     }
+
     @Test
     public void getStoreByIdShouldReturnSuccess() {
         Stores store = new Stores();
@@ -81,7 +76,6 @@ public class StoresControllerTest {
         Assertions.assertEquals(store, responseEntity.getBody().getData());
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
-
 
     @Test
     public void deleteStoreShouldReturnSuccess() {

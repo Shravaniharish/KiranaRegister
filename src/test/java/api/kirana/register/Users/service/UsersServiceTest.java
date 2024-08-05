@@ -4,6 +4,9 @@ import api.kirana.register.users.entity.Users;
 import api.kirana.register.users.models.UsersDTO;
 import api.kirana.register.users.repo.UsersDAO;
 import api.kirana.register.users.service.UsersServiceImpl;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,21 +20,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 @ExtendWith(MockitoExtension.class)
 public class UsersServiceTest {
-    @Mock
-    private UsersDAO userDAO;
+    @Mock private UsersDAO userDAO;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+    @Mock private PasswordEncoder passwordEncoder;
 
-
-    @InjectMocks
-    private UsersServiceImpl userService;
+    @InjectMocks private UsersServiceImpl userService;
 
     @Test
     public void getAllUsersShouldReturnSuccess() {
@@ -102,16 +97,12 @@ public class UsersServiceTest {
     @Test
     public void deleteUserShouldReturnSuccess() {
         String userId = "test-id";
-        //setup mock to call userDAO.deleteUser(userID) and do nothing
+        // setup mock to call userDAO.deleteUser(userID) and do nothing
         Mockito.doNothing().when(userDAO).deleteUser(userId);
         String response = userService.deleteUser(userId);
-        //setup mock to ensure userDAO.deleteUser(userID) is called only once
+        // setup mock to ensure userDAO.deleteUser(userID) is called only once
         Mockito.verify(userDAO, Mockito.times(1)).deleteUser(userId);
         Assertions.assertNotNull(response);
         Assertions.assertEquals("test-id", response);
     }
-
-
-
-
 }

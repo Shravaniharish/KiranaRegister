@@ -7,6 +7,9 @@ import api.kirana.register.transactions.helpers.ReportingHelper;
 import api.kirana.register.transactions.models.AggregationResponse;
 import api.kirana.register.transactions.models.TransactionsDTO;
 import api.kirana.register.transactions.repo.TransactionsDAO;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,27 +22,24 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.*;
-
 @ExtendWith(MockitoExtension.class)
 class TransactionsServiceImplTest {
-    @Mock
-    private TransactionsDAO transactionDAO;
-    @Mock
-    private CurrencyConversionHelper currencyConversionHelper;
-    @Mock
-    private ReportingHelper reportingHelper;
+    @Mock private TransactionsDAO transactionDAO;
+    @Mock private CurrencyConversionHelper currencyConversionHelper;
+    @Mock private ReportingHelper reportingHelper;
 
-    @InjectMocks
-    private TransactionsServiceImpl transactionService;
+    @InjectMocks private TransactionsServiceImpl transactionService;
 
     @Test
     public void getAllTransactionsShouldReturnSuccess() {
         int page = 2;
         int size = 4;
-        List<Transactions> transactions = Arrays.asList(new Transactions(), new Transactions(), new Transactions(), new Transactions());
+        List<Transactions> transactions =
+                Arrays.asList(
+                        new Transactions(),
+                        new Transactions(),
+                        new Transactions(),
+                        new Transactions());
         Page<Transactions> transactionsList = new PageImpl<>(transactions);
         Pageable pageable = PageRequest.of(page, size);
 
@@ -57,8 +57,10 @@ class TransactionsServiceImplTest {
 
         Optional<Transactions> transactions = Optional.of(transaction);
 
-        Mockito.when(transactionDAO.getTransactionById(transaction.getId())).thenReturn(transactions);
-        Optional<Transactions> actualTransactions = transactionService.getTransactionById(transaction.getId());
+        Mockito.when(transactionDAO.getTransactionById(transaction.getId()))
+                .thenReturn(transactions);
+        Optional<Transactions> actualTransactions =
+                transactionService.getTransactionById(transaction.getId());
 
         Assertions.assertNotNull(actualTransactions);
         Assertions.assertEquals(transactions, actualTransactions);
@@ -71,8 +73,10 @@ class TransactionsServiceImplTest {
 
         List<Transactions> transactions = List.of(transaction);
 
-        Mockito.when(transactionDAO.getTransactionsByType(transaction.getType())).thenReturn(transactions);
-        List<Transactions> actualTransactions = transactionService.getTransactionsByType(transaction.getType());
+        Mockito.when(transactionDAO.getTransactionsByType(transaction.getType()))
+                .thenReturn(transactions);
+        List<Transactions> actualTransactions =
+                transactionService.getTransactionsByType(transaction.getType());
 
         Assertions.assertNotNull(actualTransactions);
         Assertions.assertEquals(transactions, actualTransactions);
@@ -85,8 +89,10 @@ class TransactionsServiceImplTest {
 
         List<Transactions> transactions = List.of(transaction);
 
-        Mockito.when(transactionDAO.getTransactionByStatus(transaction.getStatus())).thenReturn(transactions);
-        List<Transactions> actualTransactions = transactionService.getTransactionByStatus(transaction.getStatus());
+        Mockito.when(transactionDAO.getTransactionByStatus(transaction.getStatus()))
+                .thenReturn(transactions);
+        List<Transactions> actualTransactions =
+                transactionService.getTransactionByStatus(transaction.getStatus());
 
         Assertions.assertNotNull(actualTransactions);
         Assertions.assertEquals(transactions, actualTransactions);
@@ -102,9 +108,12 @@ class TransactionsServiceImplTest {
 
             List<Transactions> transactionList = List.of(transaction);
 
-            Mockito.when(transactionDAO.getTransactionByDateBetween(Mockito.any(Date.class), Mockito.any(Date.class)))
+            Mockito.when(
+                            transactionDAO.getTransactionByDateBetween(
+                                    Mockito.any(Date.class), Mockito.any(Date.class)))
                     .thenReturn(transactionList);
-            List<Transactions> actualTransactions = transactionService.getTransactionByDate("2024-07-03");
+            List<Transactions> actualTransactions =
+                    transactionService.getTransactionByDate("2024-07-03");
 
             Assertions.assertNotNull(actualTransactions);
             Assertions.assertEquals(transactionList, actualTransactions);
@@ -134,19 +143,23 @@ class TransactionsServiceImplTest {
         expectedTransaction.setDate(transactionDTO.getDate());
 
         // Mocking the currency conversion helper
-        Mockito.when(currencyConversionHelper.convertAmount(transactionDTO.getCurrency(), "INR", transactionDTO.getAmount()))
+        Mockito.when(
+                        currencyConversionHelper.convertAmount(
+                                transactionDTO.getCurrency(), "INR", transactionDTO.getAmount()))
                 .thenReturn(100.0);
-        Mockito.when(transactionDAO.saveTransaction(Mockito.any(Transactions.class))).thenAnswer(invocation -> {
-            Transactions savedTransaction = invocation.getArgument(0);
-            savedTransaction.setId("test-id");
-            return savedTransaction;
-        });
+        Mockito.when(transactionDAO.saveTransaction(Mockito.any(Transactions.class)))
+                .thenAnswer(
+                        invocation -> {
+                            Transactions savedTransaction = invocation.getArgument(0);
+                            savedTransaction.setId("test-id");
+                            return savedTransaction;
+                        });
         Transactions actualTransaction = transactionService.saveTransaction(transactionDTO);
         Assertions.assertNotNull(actualTransaction);
         Assertions.assertEquals(expectedTransaction.getAmount(), actualTransaction.getAmount());
-        Assertions.assertEquals(expectedTransaction.getPaymentMethod(), actualTransaction.getPaymentMethod());
+        Assertions.assertEquals(
+                expectedTransaction.getPaymentMethod(), actualTransaction.getPaymentMethod());
         Assertions.assertEquals(expectedTransaction.getStatus(), actualTransaction.getStatus());
-
     }
 
     @Test
@@ -161,9 +174,12 @@ class TransactionsServiceImplTest {
         Map<String, AggregationResponse> expectedAggregations = new LinkedHashMap<>();
         expectedAggregations.put("JULY 2024", new AggregationResponse());
 
-        Mockito.when(reportingHelper.getMonthlyAggregations(startDate, endDate)).thenReturn(expectedAggregations);
+        Mockito.when(reportingHelper.getMonthlyAggregations(startDate, endDate))
+                .thenReturn(expectedAggregations);
 
-        Map<String, AggregationResponse> actualAggregations = transactionService.getReports(ReportType.valueOf(reportType), startDateStr, endDateStr);
+        Map<String, AggregationResponse> actualAggregations =
+                transactionService.getReports(
+                        ReportType.valueOf(reportType), startDateStr, endDateStr);
         Assertions.assertNotNull(actualAggregations);
         Assertions.assertEquals(expectedAggregations.size(), actualAggregations.size());
         Assertions.assertEquals(expectedAggregations, actualAggregations);
@@ -181,9 +197,12 @@ class TransactionsServiceImplTest {
         Map<String, AggregationResponse> expectedAggregations = new LinkedHashMap<>();
         expectedAggregations.put("2024", new AggregationResponse());
 
-        Mockito.when(reportingHelper.getYearlyAggregations(startDate, endDate)).thenReturn(expectedAggregations);
+        Mockito.when(reportingHelper.getYearlyAggregations(startDate, endDate))
+                .thenReturn(expectedAggregations);
 
-        Map<String, AggregationResponse> actualAggregations = transactionService.getReports(ReportType.valueOf(reportType), startDateStr, endDateStr);
+        Map<String, AggregationResponse> actualAggregations =
+                transactionService.getReports(
+                        ReportType.valueOf(reportType), startDateStr, endDateStr);
         Assertions.assertNotNull(actualAggregations);
         Assertions.assertEquals(expectedAggregations.size(), actualAggregations.size());
         Assertions.assertEquals(expectedAggregations, actualAggregations);

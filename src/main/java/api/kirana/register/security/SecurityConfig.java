@@ -1,4 +1,5 @@
 package api.kirana.register.security;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -48,11 +49,12 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().authenticated()).httpBasic(withDefaults());
-        //basic authentication
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize ->
+                        authorize.requestMatchers("/api/users/*")
+                                .permitAll()
+                                .anyRequest().authenticated())
+                .httpBasic(withDefaults());
 
         return http.build();
     }
@@ -63,11 +65,10 @@ public class SecurityConfig {
      * @return an AuthenticationProvider implementation
      */
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
 }
-

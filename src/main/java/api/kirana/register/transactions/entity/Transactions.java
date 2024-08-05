@@ -10,18 +10,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
 import java.util.Date;
 
-
 @Data
-@Document(collection="Transaction")
+@Document(collection = "Transaction")
 @EqualsAndHashCode(callSuper = true)
 public class Transactions extends DateAudit implements Serializable {
-    @Id
-    @NotEmpty
-    private String id;
-    @Indexed
-    private String type;
-    @Indexed
-    private String status;
+    @Id @NotEmpty private String id;
+    @Indexed private String type;
+    @Indexed private String status;
     private String currency;
     private double amount;
     private String paymentMethod;

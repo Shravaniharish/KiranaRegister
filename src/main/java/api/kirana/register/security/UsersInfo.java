@@ -1,17 +1,15 @@
 package api.kirana.register.security;
 
 import api.kirana.register.users.entity.Users;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class UsersInfo implements UserDetails {
-
 
     private String name;
     private String password;
@@ -23,11 +21,12 @@ public class UsersInfo implements UserDetails {
      * @param userInfo the user information
      */
     public UsersInfo(Users userInfo) {
-        this.name=userInfo.getUserName();
-        this.password=userInfo.getPassword();
-        this.authorities= Arrays.stream(userInfo.getRole().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        this.name = userInfo.getUserName();
+        this.password = userInfo.getPassword();
+        this.authorities =
+                Arrays.stream(userInfo.getRole().split(","))
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
     }
 
     @Override

@@ -5,6 +5,9 @@ import api.kirana.register.customers.entity.Customers;
 import api.kirana.register.customers.models.CustomersDTO;
 import api.kirana.register.customers.service.CustomersServiceImpl;
 import api.kirana.register.response.ApiResponse;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,29 +22,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 @ExtendWith(MockitoExtension.class)
 public class CustomerControllerTest {
-    @Mock
-    private CustomersServiceImpl customerService;
+    @Mock private CustomersServiceImpl customerService;
 
-    @InjectMocks
-    private CustomersController customerController;
+    @InjectMocks private CustomersController customerController;
 
     @Test
     public void getAllCustomersShouldReturnSuccess() {
         int page = 2;
         int size = 4;
-        List<Customers> customers = Arrays.asList(
-                new Customers(), new Customers(), new Customers(), new Customers()
-        );
+        List<Customers> customers =
+                Arrays.asList(new Customers(), new Customers(), new Customers(), new Customers());
         Page<Customers> customerList = new PageImpl<>(customers);
         Pageable pageable = PageRequest.of(page, size);
         Mockito.when(customerService.getAllCustomers(pageable)).thenReturn(customerList);
-        ResponseEntity<ApiResponse> responseEntity = customerController.getAllCustomers(page,size);
+        ResponseEntity<ApiResponse> responseEntity = customerController.getAllCustomers(page, size);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         Assertions.assertEquals(customerList, responseEntity.getBody().getData());
@@ -53,14 +49,14 @@ public class CustomerControllerTest {
         customer.setId("test");
         customer.setName("xyz");
         Optional<Customers> expectedCustomer = Optional.of(customer);
-        Mockito.when(customerService.getCustomerById(customer.getId())).thenReturn(expectedCustomer);
-        ResponseEntity<ApiResponse> responseEntity = customerController.getCustomer(customer.getId(), customer.getName());
+        Mockito.when(customerService.getCustomerById(customer.getId()))
+                .thenReturn(expectedCustomer);
+        ResponseEntity<ApiResponse> responseEntity =
+                customerController.getCustomer(customer.getId(), customer.getName());
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         Assertions.assertEquals(expectedCustomer, responseEntity.getBody().getData());
-
     }
-
 
     @Test
     public void saveCustomerShouldReturnSuccess() {
@@ -68,7 +64,8 @@ public class CustomerControllerTest {
         customerDTO.setName("xyz");
         Customers customer = new Customers();
         customer.setName("xyz");
-        Mockito.when(customerService.saveCustomer(Mockito.any(CustomersDTO.class))).thenReturn(customer);
+        Mockito.when(customerService.saveCustomer(Mockito.any(CustomersDTO.class)))
+                .thenReturn(customer);
         ResponseEntity<ApiResponse> responseEntity = customerController.saveCustomer(customerDTO);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -84,4 +81,3 @@ public class CustomerControllerTest {
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 }
-

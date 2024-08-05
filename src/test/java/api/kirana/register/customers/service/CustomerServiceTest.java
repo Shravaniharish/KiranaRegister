@@ -3,6 +3,9 @@ package api.kirana.register.customers.service;
 import api.kirana.register.customers.entity.Customers;
 import api.kirana.register.customers.models.CustomersDTO;
 import api.kirana.register.customers.repo.CustomersDAO;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,27 +18,19 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 @ExtendWith(MockitoExtension.class)
 public class CustomerServiceTest {
 
+    @Mock private CustomersDAO customerDAO;
 
-    @Mock
-    private CustomersDAO customerDAO;
-
-    @InjectMocks
-    private CustomersServiceImpl customerService;
+    @InjectMocks private CustomersServiceImpl customerService;
 
     @Test
     public void getAllCustomersShouldReturnSuccess() {
         int page = 2;
         int size = 4;
-        List<Customers> customers = Arrays.asList(
-                new Customers(), new Customers(), new Customers(), new Customers()
-        );
+        List<Customers> customers =
+                Arrays.asList(new Customers(), new Customers(), new Customers(), new Customers());
         Page<Customers> customerList = new PageImpl<>(customers);
         Pageable pageable = PageRequest.of(page, size);
         Mockito.when(customerDAO.getAllCustomers(pageable)).thenReturn(customerList);

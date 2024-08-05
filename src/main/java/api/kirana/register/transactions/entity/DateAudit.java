@@ -12,9 +12,7 @@ import java.util.Date;
 @Document
 public abstract class DateAudit implements Serializable {
 
-    @CreatedDate
-    private Date createdAt;
+    @CreatedDate private Date createdAt;
 
-    @LastModifiedDate
-    private Date updatedAt;
+    @LastModifiedDate private Date updatedAt;
 }

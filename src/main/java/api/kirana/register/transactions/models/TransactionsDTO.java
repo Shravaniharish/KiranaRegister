@@ -2,6 +2,7 @@ package api.kirana.register.transactions.models;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
 import java.util.Date;
 
 @NotNull

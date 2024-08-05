@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface TransactionsService {
-   // List<Transactions> getAllTransactions();
+    // List<Transactions> getAllTransactions();
     Page<Transactions> getAllTransactions(Pageable pagable);
 
     Optional<Transactions> getTransactionById(String id);
@@ -27,8 +27,8 @@ public interface TransactionsService {
 
     Transactions saveTransaction(TransactionsDTO transactionRequest);
 
-    Map<String, AggregationResponse> getReports(ReportType reportType, String startDate, String endDate );
+    Map<String, AggregationResponse> getReports(
+            ReportType reportType, String startDate, String endDate);
 
     String deleteTransaction(String id);
-
 }

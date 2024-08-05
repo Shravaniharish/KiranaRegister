@@ -1,6 +1,9 @@
 package api.kirana.register.customers.repo;
 
 import api.kirana.register.customers.entity.Customers;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,25 +16,18 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 @ExtendWith(MockitoExtension.class)
 public class CustomerDAOTest {
-    @Mock
-    private CustomersRepo customerRepo;
+    @Mock private CustomersRepo customerRepo;
 
-    @InjectMocks
-    private CustomersDAO customerDAO;
+    @InjectMocks private CustomersDAO customerDAO;
 
     @Test
     public void getAllCustomersShouldReturnSuccess() {
         int page = 2;
         int size = 4;
-        List<Customers> customers = Arrays.asList(
-                new Customers(), new Customers(), new Customers(), new Customers()
-        );
+        List<Customers> customers =
+                Arrays.asList(new Customers(), new Customers(), new Customers(), new Customers());
         Page<Customers> customerList = new PageImpl<>(customers);
         Pageable pageable = PageRequest.of(page, size);
         Mockito.when(customerRepo.findAll(pageable)).thenReturn(customerList);
@@ -40,9 +36,8 @@ public class CustomerDAOTest {
         Assertions.assertEquals(customerList, actualList);
     }
 
-
     @Test
-    public void getCustomerByIdShouldReturnSuccess(){
+    public void getCustomerByIdShouldReturnSuccess() {
         Customers customer = new Customers();
         customer.setId("test");
         Optional<Customers> expectedCustomer = Optional.of(customer);
@@ -50,7 +45,6 @@ public class CustomerDAOTest {
         Optional<Customers> actualCustomer = customerDAO.getCustomerById(customer.getId());
         Assertions.assertNotNull(actualCustomer);
         Assertions.assertEquals(expectedCustomer, actualCustomer);
-
     }
 
     @Test
@@ -82,7 +76,6 @@ public class CustomerDAOTest {
         String id = "test";
         Mockito.doNothing().when(customerRepo).deleteById(id);
         customerDAO.deleteCustomer(id);
-        Mockito.verify(customerRepo,Mockito.times(1)).deleteById(id);
+        Mockito.verify(customerRepo, Mockito.times(1)).deleteById(id);
     }
-
 }

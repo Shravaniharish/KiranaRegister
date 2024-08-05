@@ -7,9 +7,10 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-public interface UsersRepository extends MongoRepository<Users,String> {
+public interface UsersRepository extends MongoRepository<Users, String> {
 
     Page<Users> findAll(Pageable pageable);
-    //to obtain user details using userName
+
+    // to obtain user details using userName
     Optional<Users> findByUserName(String userName);
 }

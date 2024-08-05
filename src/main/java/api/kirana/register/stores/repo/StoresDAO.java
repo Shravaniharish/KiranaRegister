@@ -23,14 +23,10 @@ public class StoresDAO {
      *
      * @return a list of Store entities
      */
-//    public List<Stores> getAllStore() {
-//        return storeRepository.findAll() ;
-//    }
-
-
-    public Page<Stores> getAllStores(Pageable pageable){
+    public Page<Stores> getAllStores(Pageable pageable) {
         return storeRepository.findAll(pageable);
     }
+
     /**
      * Retrieves a store by its ID.
      *
@@ -41,7 +37,6 @@ public class StoresDAO {
         return storeRepository.findById(id);
     }
 
-
     /**
      * Saves a store.
      *
@@ -51,9 +46,7 @@ public class StoresDAO {
     public Stores saveStore(Stores storeRequest) {
 
         return storeRepository.save(storeRequest);
-
     }
-
 
     /**
      * Deletes a store by its ID.

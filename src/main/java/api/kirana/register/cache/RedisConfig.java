@@ -14,16 +14,18 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig extends CachingConfigurerSupport {
 
-    @Value("${spring.redis.rqueue.host}")
+    @Value("${spring.redis.host}")
     private String redisHostname;
 
-    @Value("${spring.redis.rqueue.port}")
+    @Value("${spring.redis.port}")
     private int redisPort;
 
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
-        LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder().readFrom(ReadFrom.REPLICA_PREFERRED).build();
-        RedisStaticMasterReplicaConfiguration redisStaticMasterReplicaConfiguration = new RedisStaticMasterReplicaConfiguration(this.redisHostname, this.redisPort);
+        LettuceClientConfiguration clientConfig =
+                LettuceClientConfiguration.builder().readFrom(ReadFrom.REPLICA_PREFERRED).build();
+        RedisStaticMasterReplicaConfiguration redisStaticMasterReplicaConfiguration =
+                new RedisStaticMasterReplicaConfiguration(this.redisHostname, this.redisPort);
 
         return new LettuceConnectionFactory(redisStaticMasterReplicaConfiguration, clientConfig);
     }

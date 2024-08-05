@@ -1,4 +1,5 @@
 package api.kirana.register.users.controller;
+
 import api.kirana.register.response.ApiResponse;
 import api.kirana.register.users.models.UsersDTO;
 import api.kirana.register.users.service.UsersService;
@@ -27,8 +28,9 @@ public class UsersController {
      * @return a ResponseEntity containing the response with all users
      */
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse> getAllUsers(@RequestParam(defaultValue = "0") int page,
-                                                   @RequestParam(defaultValue = "2") int size) {
+    public ResponseEntity<ApiResponse> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size) {
         ApiResponse response = new ApiResponse();
         Pageable pageable = PageRequest.of(page, size);
         response.setData(userService.getAllUsers(pageable));
@@ -42,7 +44,9 @@ public class UsersController {
      * @return a ResponseEntity containing the response with the user information
      */
     @GetMapping()
-    public ResponseEntity<ApiResponse> getUser(@Valid @RequestParam(required = false) String id, @RequestParam(required = false) String name) {
+    public ResponseEntity<ApiResponse> getUser(
+            @Valid @RequestParam(required = false) String id,
+            @RequestParam(required = false) String name) {
         ApiResponse response = new ApiResponse();
         if (id == null && name == null) {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -54,19 +58,6 @@ public class UsersController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    /**
-     * Retrieves a user by their name.
-     *
-     * @param Name the name of the user to retrieve
-     * @return a ResponseEntity containing the response with the user information
-     */
-//    @GetMapping("/name")
-//    public ResponseEntity<ApiResponse> getUsersByName(@RequestParam String Name) {
-//        ApiResponse response = new ApiResponse();
-//        response.setData(userService.getUserByName(Name));
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
 
     /**
      * Saves a new user.

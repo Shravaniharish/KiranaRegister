@@ -21,20 +21,16 @@ import java.util.Optional;
 @Nested
 @ExtendWith(MockitoExtension.class)
 public class StoresDAOTest {
-    @Mock
-    private StoresRepository storeRepository;
+    @Mock private StoresRepository storeRepository;
 
-    @InjectMocks
-    private StoresDAO storeDAO;
+    @InjectMocks private StoresDAO storeDAO;
 
     @Test
     public void getAllStoreShouldReturnSuccess() {
 
         int page = 2;
         int size = 4;
-        List<Stores> stores = Arrays.asList(
-                new Stores(), new Stores(), new Stores(), new Stores()
-        );
+        List<Stores> stores = Arrays.asList(new Stores(), new Stores(), new Stores(), new Stores());
         Page<Stores> storeList = new PageImpl<>(stores);
         Pageable pageable = PageRequest.of(page, size);
         Mockito.when(storeRepository.findAll(pageable)).thenReturn(storeList);
@@ -65,17 +61,13 @@ public class StoresDAOTest {
         Stores actualStore = storeDAO.saveStore(store);
         Assertions.assertNotNull(actualStore);
         Assertions.assertEquals(store, actualStore);
-
     }
 
     @Test
     public void deleteStoreShouldReturnSuccess() {
         String storeId = "test";
         Mockito.doNothing().when(storeRepository).deleteById(storeId);
-        String response= storeDAO.deleteStore(storeId);
-        Mockito.verify(storeRepository,Mockito.times(1)).deleteById(storeId);
-
-
+        String response = storeDAO.deleteStore(storeId);
+        Mockito.verify(storeRepository, Mockito.times(1)).deleteById(storeId);
     }
-
 }

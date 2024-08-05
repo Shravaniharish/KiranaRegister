@@ -21,19 +21,15 @@ import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class StoresServiceTest {
-    @Mock
-    private StoresDAO storeDAO;
+    @Mock private StoresDAO storeDAO;
 
-    @InjectMocks
-    private StoresServiceImpl storeService;
+    @InjectMocks private StoresServiceImpl storeService;
 
     @Test
-    public void getAllStoreShouldReturnSuccess(){
+    public void getAllStoreShouldReturnSuccess() {
         int page = 2;
         int size = 4;
-        List<Stores> stores = Arrays.asList(
-                new Stores(), new Stores(), new Stores(), new Stores()
-        );
+        List<Stores> stores = Arrays.asList(new Stores(), new Stores(), new Stores(), new Stores());
         Page<Stores> storeList = new PageImpl<>(stores);
         Pageable pageable = PageRequest.of(page, size);
         Mockito.when(storeDAO.getAllStores(pageable)).thenReturn(storeList);
@@ -70,18 +66,15 @@ public class StoresServiceTest {
         Assertions.assertEquals(store.getAddress(), actualStore.getAddress());
         Assertions.assertEquals(store.getName(), actualStore.getName());
         Assertions.assertEquals(store.getPhoneNumber(), actualStore.getPhoneNumber());
-
-
     }
+
     @Test
-    public void deleteStoreShouldReturnSuccess(){
+    public void deleteStoreShouldReturnSuccess() {
         String storeId = "test";
         String expectedResponse = "test";
         Mockito.doNothing().when(storeDAO).deleteStore(storeId);
         String actualResponse = storeService.deleteStore(storeId);
         Mockito.verify(storeDAO, Mockito.times(1)).deleteStore(storeId);
         Assertions.assertEquals(expectedResponse, actualResponse);
-
     }
-
 }

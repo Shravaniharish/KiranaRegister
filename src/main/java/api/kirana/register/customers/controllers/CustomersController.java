@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/customers")
 public class CustomersController {
 
-
     private final CustomersServiceImpl customerService;
 
     @Autowired
@@ -32,8 +31,9 @@ public class CustomersController {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse> getAllCustomers(@RequestParam(defaultValue = "0") int page,
-                                                       @RequestParam(defaultValue = "2") int size) {
+    public ResponseEntity<ApiResponse> getAllCustomers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size) {
         ApiResponse response = new ApiResponse();
         Pageable pageable = PageRequest.of(page, size);
         response.setData(customerService.getAllCustomers(pageable));
@@ -49,20 +49,18 @@ public class CustomersController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping()
     public ResponseEntity<ApiResponse> getCustomer(
-            @NotNull
-           @Valid @RequestParam(required = false) String id,
+            @NotNull @Valid @RequestParam(required = false) String id,
             @RequestParam(required = false) String name) {
         ApiResponse response = new ApiResponse();
         if (id == null && name == null) {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        if (name != null)  {
+        if (name != null) {
             response.setData(customerService.getCustomerByName(name));
         }
         response.setData(customerService.getCustomerById(id));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
     /**
      * Saves a new customer.
@@ -72,7 +70,7 @@ public class CustomersController {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping()
-    public ResponseEntity<ApiResponse> saveCustomer ( @Valid @RequestBody CustomersDTO customer) {
+    public ResponseEntity<ApiResponse> saveCustomer(@Valid @RequestBody CustomersDTO customer) {
         ApiResponse response = new ApiResponse();
         response.setData(customerService.saveCustomer(customer));
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -86,7 +84,7 @@ public class CustomersController {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping()
-    public ResponseEntity<ApiResponse> deleteCustomer (@NotNull @Valid @RequestParam String id) {
+    public ResponseEntity<ApiResponse> deleteCustomer(@NotNull @Valid @RequestParam String id) {
         ApiResponse response = new ApiResponse();
         response.setData(customerService.deleteCustomer(id));
         return new ResponseEntity<>(response, HttpStatus.OK);

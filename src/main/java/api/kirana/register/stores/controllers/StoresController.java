@@ -1,4 +1,5 @@
 package api.kirana.register.stores.controllers;
+
 import api.kirana.register.response.ApiResponse;
 import api.kirana.register.stores.models.StoresDTO;
 import api.kirana.register.stores.service.StoresService;
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequestMapping("/api/stores")
@@ -29,8 +29,9 @@ public class StoresController {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse>  getAllStores(@RequestParam(defaultValue = "0") int page,
-                                                     @RequestParam(defaultValue = "2") int size) {
+    public ResponseEntity<ApiResponse> getAllStores(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size) {
         ApiResponse response = new ApiResponse();
         Pageable pageable = PageRequest.of(page, size);
         response.setData(storeService.getAllStore(pageable));

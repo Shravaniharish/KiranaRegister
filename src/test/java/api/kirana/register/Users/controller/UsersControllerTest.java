@@ -28,19 +28,15 @@ import java.util.Optional;
 @ExtendWith(MockitoExtension.class)
 public class UsersControllerTest {
     private static final Log log = LogFactory.getLog(UsersControllerTest.class);
-    @Mock
-    private UsersService userService;
+    @Mock private UsersService userService;
 
-    @InjectMocks
-    private UsersController userController;
+    @InjectMocks private UsersController userController;
 
     @Test
     public void getAllUsersShouldReturnSuccess() {
         int page = 2;
         int size = 4;
-        List<Users> users = Arrays.asList(
-                new Users(), new Users(), new Users(), new Users()
-        );
+        List<Users> users = Arrays.asList(new Users(), new Users(), new Users(), new Users());
         Page<Users> usersList = new PageImpl<>(users);
         ApiResponse expectedResponse = new ApiResponse();
         expectedResponse.setData(usersList);
@@ -64,8 +60,6 @@ public class UsersControllerTest {
         Assertions.assertEquals(expectedUser, actualResponse.getBody().getData());
         Assertions.assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
     }
-
-
 
     @Test
     public void saveUserShouldReturnSuccess() {
@@ -92,7 +86,6 @@ public class UsersControllerTest {
 
         Assertions.assertNotNull(response.getBody());
         Assertions.assertEquals(expectedResponse.getData(), response.getBody().getData());
-
     }
 
     @Test
@@ -100,13 +93,9 @@ public class UsersControllerTest {
         String userId = "123";
         String userResponse = "User is deleted";
         Mockito.when(userService.deleteUser(userId)).thenReturn(userResponse);
-        ResponseEntity<ApiResponse> responseEntity=userController.deleteUser(userId);
+        ResponseEntity<ApiResponse> responseEntity = userController.deleteUser(userId);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         Assertions.assertNotNull(responseEntity.getBody());
     }
-
-
-
-
 }

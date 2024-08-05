@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @RequestMapping("/api/transactions")
 public class TransactionsControllers {
@@ -25,15 +24,16 @@ public class TransactionsControllers {
         this.transactionService = transactionService;
     }
 
-
     /**
      * lists all transactions along with their specific details
+     *
      * @return
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse> getAllTransactions(@RequestParam(defaultValue = "0") int page,
-                                                          @RequestParam(defaultValue = "2") int size) {
+    public ResponseEntity<ApiResponse> getAllTransactions(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size) {
         ApiResponse response = new ApiResponse();
         Pageable pageable = PageRequest.of(page, size);
         response.setData(transactionService.getAllTransactions(pageable));
@@ -42,6 +42,7 @@ public class TransactionsControllers {
 
     /**
      * displays details of transaction on specifying transaction details
+     *
      * @param id
      * @return
      */
@@ -50,16 +51,18 @@ public class TransactionsControllers {
     public ResponseEntity<ApiResponse> getTransactionById(@Valid @RequestParam String id) {
         ApiResponse response = new ApiResponse();
         response.setData(transactionService.getTransactionById(id));
-        return new ResponseEntity<>(response ,HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     /**
      * displays list of transactions for a specified status
+     *
      * @param status
      * @return
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/status")
-    public ResponseEntity<ApiResponse>  getTransactionByStatus(@RequestParam String status) {
+    public ResponseEntity<ApiResponse> getTransactionByStatus(@RequestParam String status) {
         ApiResponse response = new ApiResponse();
         response.setData(transactionService.getTransactionByStatus(status));
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -67,6 +70,7 @@ public class TransactionsControllers {
 
     /**
      * displays list of transactions for a specified transaction status
+     *
      * @param type
      * @return
      */
@@ -80,6 +84,7 @@ public class TransactionsControllers {
 
     /**
      * displays list of transactions for a specified transaction date
+     *
      * @param date
      * @return
      */
@@ -93,23 +98,27 @@ public class TransactionsControllers {
 
     /**
      * displays list of transactions that lie between the startDate and endDate
+     *
      * @param startDate
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/dates")
-    public ResponseEntity<ApiResponse> getTransactionByDateBetween(@RequestParam String startDate , String endDate) {
+    public ResponseEntity<ApiResponse> getTransactionByDateBetween(
+            @RequestParam String startDate, String endDate) {
         ApiResponse response = new ApiResponse();
         response.setData(transactionService.getTransactionByDateBetween(startDate, endDate));
-        return  new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
      * saves transaction into the database
+     *
      * @param request
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping()
-    public ResponseEntity<ApiResponse> saveTransactions(@Valid @RequestBody TransactionsDTO request) {
+    public ResponseEntity<ApiResponse> saveTransactions(
+            @Valid @RequestBody TransactionsDTO request) {
         ApiResponse response = new ApiResponse();
         response.setData(transactionService.saveTransaction(request));
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -119,8 +128,8 @@ public class TransactionsControllers {
      * Generates reports based on the specified report type and date range.
      *
      * @param reportType The type of report to generate (WEEKLY, MONTHLY, YEARLY).
-     * @param startDate  The start date for the report range in YYYY-MM-DD format.
-     * @param endDate    The end date for the report range in YYYY-MM-DD format.
+     * @param startDate The start date for the report range in YYYY-MM-DD format.
+     * @param endDate The end date for the report range in YYYY-MM-DD format.
      * @return A ResponseEntity containing the report data.
      */
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -143,6 +152,7 @@ public class TransactionsControllers {
 
     /**
      * deletes transaction for the specified transaction id
+     *
      * @param id
      */
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -153,4 +163,3 @@ public class TransactionsControllers {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
-
