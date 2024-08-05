@@ -1,8 +1,10 @@
 package api.kirana.register.transactions.service;
 
 import api.kirana.register.transactions.entity.Transactions;
+import api.kirana.register.transactions.enums.ReportType;
 import api.kirana.register.transactions.helpers.CurrencyConversionHelper;
 import api.kirana.register.transactions.helpers.ReportingHelper;
+import api.kirana.register.transactions.models.AggregationResponse;
 import api.kirana.register.transactions.models.TransactionsDTO;
 import api.kirana.register.transactions.repo.TransactionsDAO;
 import org.junit.jupiter.api.Assertions;
@@ -18,10 +20,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
 class TransactionsServiceImplTest {
@@ -149,50 +149,45 @@ class TransactionsServiceImplTest {
 
     }
 
-//    @Test
-//    void getReportsShouldReturnMonthlyAggregations() {
-//        String reportType = "monthly";
-//        String startDateStr = "2024-07-01";
-//        String endDateStr = "2024-07-31";
-//
-//        LocalDate startDate = LocalDate.parse(startDateStr);
-//        LocalDate endDate = LocalDate.parse(endDateStr);
-//        Map<String, AggregationResponse> expectedAggregations = new LinkedHashMap<>();
-//        expectedAggregations.put("2024-07", new AggregationResponse());
-//
-//        Mockito.doAnswer(invocation -> {
-//            Map<String, AggregationResponse> map = invocation.getArgument(2);
-//            map.putAll(expectedAggregations);
-//            return null;
-//        }).when(reportingHelper).getMonthlyAggregations(startDate, endDate, new LinkedHashMap<>());
-//
-//        Map<String, AggregationResponse> actualAggregations = transactionService.getReports(reportType, startDateStr, endDateStr);
-//        Assertions.assertNotNull(actualAggregations);
-//        Assertions.assertEquals(expectedAggregations.size(), actualAggregations.size());
-//        Assertions.assertEquals(expectedAggregations, actualAggregations);
-//    }
+    @Test
+    void getReportsShouldReturnMonthlyAggregations() {
+        String reportType = "MONTHLY";
+        String startDateStr = "2024-07-01";
+        String endDateStr = "2024-07-31";
 
-//    @Test
-//    void getReportsShouldReturnYearlyAggregations() {
-//        ReportType reportType = ReportType.YEARLY;
-//        String startDateStr = "2024-01-01";
-//        String endDateStr = "2024-12-31";
-//
-//        LocalDate startDate = LocalDate.parse(startDateStr);
-//        LocalDate endDate = LocalDate.parse(endDateStr);
-//
-//        Map<String, AggregationResponse> expectedAggregations = new LinkedHashMap<>();
-//        expectedAggregations.put("2024", new AggregationResponse());
-//
-//        Mockito.when(reportingHelper.getAggregations(reportType, startDate, endDate))
-//                .thenReturn(expectedAggregations);
-//
-//        Map<String, AggregationResponse> actualAggregations = transactionService.getReports(reportType, startDateStr, endDateStr);
-//        Assertions.assertNotNull(actualAggregations);
-//        Assertions.assertEquals(expectedAggregations.size(), actualAggregations.size());
-//        Assertions.assertEquals(expectedAggregations, actualAggregations);
-//    }
+        LocalDate startDate = LocalDate.parse(startDateStr);
+        LocalDate endDate = LocalDate.parse(endDateStr);
 
+        Map<String, AggregationResponse> expectedAggregations = new LinkedHashMap<>();
+        expectedAggregations.put("JULY 2024", new AggregationResponse());
+
+        Mockito.when(reportingHelper.getMonthlyAggregations(startDate, endDate)).thenReturn(expectedAggregations);
+
+        Map<String, AggregationResponse> actualAggregations = transactionService.getReports(ReportType.valueOf(reportType), startDateStr, endDateStr);
+        Assertions.assertNotNull(actualAggregations);
+        Assertions.assertEquals(expectedAggregations.size(), actualAggregations.size());
+        Assertions.assertEquals(expectedAggregations, actualAggregations);
+    }
+
+    @Test
+    void getReportsShouldReturnYearlyAggregations() {
+        String reportType = "YEARLY";
+        String startDateStr = "2024-01-01";
+        String endDateStr = "2024-12-31";
+
+        LocalDate startDate = LocalDate.parse(startDateStr);
+        LocalDate endDate = LocalDate.parse(endDateStr);
+
+        Map<String, AggregationResponse> expectedAggregations = new LinkedHashMap<>();
+        expectedAggregations.put("2024", new AggregationResponse());
+
+        Mockito.when(reportingHelper.getYearlyAggregations(startDate, endDate)).thenReturn(expectedAggregations);
+
+        Map<String, AggregationResponse> actualAggregations = transactionService.getReports(ReportType.valueOf(reportType), startDateStr, endDateStr);
+        Assertions.assertNotNull(actualAggregations);
+        Assertions.assertEquals(expectedAggregations.size(), actualAggregations.size());
+        Assertions.assertEquals(expectedAggregations, actualAggregations);
+    }
 
     @Test
     public void deleteTransactionShouldReturnSuccess() {
