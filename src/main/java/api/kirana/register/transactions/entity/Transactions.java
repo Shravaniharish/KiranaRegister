@@ -25,8 +25,6 @@ public class Transactions extends DateAudit implements Serializable {
     private String currency;
     private double amount;
     private String paymentMethod;
-//    private String transactionTime;
-//    private String transactionDate;
     private Date date;
     private String customerId;
 }

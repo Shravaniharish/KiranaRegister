@@ -58,15 +58,6 @@ public class TransactionsDAO {
         return transactionRepo.findByStatus(status);
     }
 
-//    /**
-//     * Retrieves transactions by their date
-//     * @param date
-//     * @return
-//     */
-//    public List<Transactions> getTransactionByDate(Date date) {
-//        return transactionRepo.findByDate(date);
-//    }
-
 
     /**
      * Retrieves transactions that occurred between two dates

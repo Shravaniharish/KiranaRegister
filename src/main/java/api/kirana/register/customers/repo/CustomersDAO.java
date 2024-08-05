@@ -1,11 +1,11 @@
 package api.kirana.register.customers.repo;
+
 import api.kirana.register.customers.entity.Customers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 @Component
 public class CustomersDAO {
@@ -22,9 +22,7 @@ public class CustomersDAO {
      *
      * @return a list of all customers
      */
-    //public List<Customers> getAllCustomers() {
-//        return customerRepo.findAll();
-//    }
+
     public Page<Customers> getAllCustomers(Pageable pageable) {
         return customerRepo.findAll(pageable);
     }

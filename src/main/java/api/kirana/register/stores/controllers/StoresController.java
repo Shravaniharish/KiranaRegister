@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -26,6 +27,7 @@ public class StoresController {
      *
      * @return a ResponseEntity containing the response with all stores
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<ApiResponse>  getAllStores(@RequestParam(defaultValue = "0") int page,
                                                      @RequestParam(defaultValue = "2") int size) {
@@ -41,6 +43,7 @@ public class StoresController {
      * @param id the ID of the store to retrieve
      * @return a ResponseEntity containing the response with the store information
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping()
     public ResponseEntity<ApiResponse> getStoreById(@Valid @RequestParam String id) {
         ApiResponse response = new ApiResponse();
@@ -54,6 +57,7 @@ public class StoresController {
      * @param storeRequest the request body containing store information to save
      * @return a ResponseEntity containing the response with the saved store information
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping()
     public ResponseEntity<ApiResponse> saveStore(@Valid @RequestBody StoresDTO storeRequest) {
         ApiResponse response = new ApiResponse();
@@ -67,6 +71,7 @@ public class StoresController {
      * @param id the ID of the store to delete
      * @return a ResponseEntity containing the response indicating the deletion status
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping()
     public ResponseEntity<ApiResponse> deleteStore(@Valid @RequestParam String id) {
         ApiResponse response = new ApiResponse();

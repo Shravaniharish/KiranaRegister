@@ -4,11 +4,13 @@ import api.kirana.register.customers.models.CustomersDTO;
 import api.kirana.register.customers.service.CustomersServiceImpl;
 import api.kirana.register.response.ApiResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,6 +30,7 @@ public class CustomersController {
      *
      * @return a ResponseEntity containing the list of all customers and HTTP status
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllCustomers(@RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "2") int size) {
@@ -43,8 +46,10 @@ public class CustomersController {
      * @param id the ID of the customer
      * @return a ResponseEntity containing the customer data and HTTP status
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping()
     public ResponseEntity<ApiResponse> getCustomer(
+            @NotNull
            @Valid @RequestParam(required = false) String id,
             @RequestParam(required = false) String name) {
         ApiResponse response = new ApiResponse();
@@ -65,8 +70,9 @@ public class CustomersController {
      * @param customer the customer data transfer object
      * @return a ResponseEntity containing the saved customer data and HTTP status
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping()
-    public ResponseEntity<ApiResponse> saveCustomer (@Valid @RequestBody CustomersDTO customer) {
+    public ResponseEntity<ApiResponse> saveCustomer ( @Valid @RequestBody CustomersDTO customer) {
         ApiResponse response = new ApiResponse();
         response.setData(customerService.saveCustomer(customer));
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -78,8 +84,9 @@ public class CustomersController {
      * @param id the ID of the customer
      * @return a ResponseEntity containing the result of the delete operation and HTTP status
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping()
-    public ResponseEntity<ApiResponse> deleteCustomer (@Valid @RequestParam String id) {
+    public ResponseEntity<ApiResponse> deleteCustomer (@NotNull @Valid @RequestParam String id) {
         ApiResponse response = new ApiResponse();
         response.setData(customerService.deleteCustomer(id));
         return new ResponseEntity<>(response, HttpStatus.OK);

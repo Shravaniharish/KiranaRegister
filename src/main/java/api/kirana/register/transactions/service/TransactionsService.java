@@ -1,6 +1,7 @@
 package api.kirana.register.transactions.service;
 
 import api.kirana.register.transactions.entity.Transactions;
+import api.kirana.register.transactions.enums.ReportType;
 import api.kirana.register.transactions.models.AggregationResponse;
 import api.kirana.register.transactions.models.TransactionsDTO;
 import org.springframework.data.domain.Page;
@@ -26,13 +27,7 @@ public interface TransactionsService {
 
     Transactions saveTransaction(TransactionsDTO transactionRequest);
 
-    Map<String, AggregationResponse> getReports(String reportType, String startDate, String endDate );
-
-//    Map<String, AggregationResponse> getWeeklyAggregation(String startDate, String endDate);
-//
-//    Map<String, AggregationResponse> getMonthlyAggregation(String startDate, String endDate);
-//
-//    Map<String, AggregationResponse> getYearlyAggregation(String startDate, String endDate);
+    Map<String, AggregationResponse> getReports(ReportType reportType, String startDate, String endDate );
 
     String deleteTransaction(String id);
 

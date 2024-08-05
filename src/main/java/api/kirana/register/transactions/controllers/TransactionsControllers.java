@@ -1,9 +1,11 @@
 package api.kirana.register.transactions.controllers;
 
 import api.kirana.register.response.ApiResponse;
+import api.kirana.register.transactions.enums.ReportType;
 import api.kirana.register.transactions.models.TransactionsDTO;
 import api.kirana.register.transactions.service.TransactionsService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -114,20 +116,30 @@ public class TransactionsControllers {
     }
 
     /**
-     * gives weekly monthly
-     * @param reportType
-     * @param startDate
-     * @param endDate
+     * Generates reports based on the specified report type and date range.
      *
+     * @param reportType The type of report to generate (WEEKLY, MONTHLY, YEARLY).
+     * @param startDate  The start date for the report range in YYYY-MM-DD format.
+     * @param endDate    The end date for the report range in YYYY-MM-DD format.
+     * @return A ResponseEntity containing the report data.
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/reports")
-    public ResponseEntity<ApiResponse> getReports(@RequestParam String reportType, @RequestParam String startDate, @RequestParam String endDate) {
+    public ResponseEntity<ApiResponse> getReports(
+            @Valid @NotNull @RequestParam String reportType,
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
         ApiResponse response = new ApiResponse();
-        response.setData(transactionService.getReports(reportType, startDate, endDate));
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 
+        try {
+            ReportType reportTypeEnum = ReportType.valueOf(reportType.toUpperCase());
+            response.setData(transactionService.getReports(reportTypeEnum, startDate, endDate));
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            response.setErrorMessage("Invalid report type: " + reportType);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
 
     /**
      * deletes transaction for the specified transaction id
@@ -135,7 +147,7 @@ public class TransactionsControllers {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping()
-    public ResponseEntity<ApiResponse> deleteTransaction(@Valid @RequestParam String id) {
+    public ResponseEntity<ApiResponse> deleteTransaction(@Valid @NotNull @RequestParam String id) {
         ApiResponse response = new ApiResponse();
         response.setData(transactionService.deleteTransaction(id));
         return new ResponseEntity<>(response, HttpStatus.OK);

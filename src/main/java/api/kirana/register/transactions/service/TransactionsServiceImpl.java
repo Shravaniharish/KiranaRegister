@@ -1,6 +1,7 @@
 package api.kirana.register.transactions.service;
 
 import api.kirana.register.transactions.entity.Transactions;
+import api.kirana.register.transactions.enums.ReportType;
 import api.kirana.register.transactions.helpers.CurrencyConversionHelper;
 import api.kirana.register.transactions.helpers.ReportingHelper;
 import api.kirana.register.transactions.models.AggregationResponse;
@@ -34,7 +35,6 @@ public class TransactionsServiceImpl implements TransactionsService {
      * lists all transactions along with their specific details
      * @return
      */
-    //@Cacheable(value = "transactions", key = "#pageable")
     @Override
     public Page<Transactions> getAllTransactions(Pageable pageable){
         return transactionDAO.getAllTransactions(pageable);
@@ -44,7 +44,6 @@ public class TransactionsServiceImpl implements TransactionsService {
      * @param id
      * @return
      */
-   // @Cacheable(value = "transactions", key = "#id")
     @Override
     public Optional<Transactions> getTransactionById(String id) {
         return transactionDAO.getTransactionById(id);
@@ -55,7 +54,6 @@ public class TransactionsServiceImpl implements TransactionsService {
      * @param type
      * @return
      */
-    //@Cacheable(value = "transactions", key = "#type")
     @Override
     public List<Transactions> getTransactionsByType(String type) {
         return transactionDAO.getTransactionsByType(type);
@@ -66,7 +64,6 @@ public class TransactionsServiceImpl implements TransactionsService {
      * @param status
      * @return
      */
-   // @Cacheable(value = "transactions", key = "#status")
     @Override
     public List<Transactions> getTransactionByStatus(String status) {
         return transactionDAO.getTransactionByStatus(status);
@@ -77,7 +74,6 @@ public class TransactionsServiceImpl implements TransactionsService {
      * @param date
      * @return
      */
-    //@Cacheable(value = "transactions", key = "#date")
     @Override
     public List<Transactions> getTransactionByDate(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -95,7 +91,6 @@ public class TransactionsServiceImpl implements TransactionsService {
      * @param startDate
      * @param endDate
      */
-    //@Cacheable(value = "transactions", key = "{#startDate, #endDate}")
     @Override
     public List<Transactions> getTransactionByDateBetween(String startDate, String endDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -106,12 +101,10 @@ public class TransactionsServiceImpl implements TransactionsService {
         return transactionDAO.getTransactionByDateBetween(start, end);
     }
 
-        /**
-         * saves transaction into the database
-         * @param transactionRequest
-         */
-
-   // @CachePut(value = "transactions", key = "#transactionRequest.id")
+    /**
+     * saves transaction into the database
+     * @param transactionRequest
+     */
     @Override
     public Transactions saveTransaction(TransactionsDTO transactionRequest) {
         Transactions transaction = new Transactions();
@@ -122,8 +115,6 @@ public class TransactionsServiceImpl implements TransactionsService {
         transaction.setCustomerId(transactionRequest.getCustomerId());
         transaction.setPaymentMethod(transactionRequest.getPaymentMethod());
         transaction.setDate(transactionRequest.getDate());
-        //transaction.setTransactionTime(String.valueOf(LocalTime.parse(LocalTime.now().toString())));
-        //transaction.setDate(String.valueOf(LocalDate.parse(LocalDate.now().toString())));
         return transactionDAO.saveTransaction(transaction);
     }
 
@@ -131,7 +122,6 @@ public class TransactionsServiceImpl implements TransactionsService {
      * deletes transaction for the specified transaction id
      * @param id
      */
-    //@CacheEvict(value = "transactions", key = "#id")
     @Override
     public String deleteTransaction(String id) {
         transactionDAO.deleteTransaction(id);
@@ -139,22 +129,22 @@ public class TransactionsServiceImpl implements TransactionsService {
     }
 
     @Override
-    public Map<String, AggregationResponse> getReports(String reportType, String startDateStr, String endDateStr) {
+    public Map<String, AggregationResponse> getReports(ReportType reportType, String startDateStr, String endDateStr) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate parsedStartDate = LocalDate.parse(startDateStr, formatter);
         LocalDate parsedEndDate = LocalDate.parse(endDateStr, formatter);
 
-        Map<String, AggregationResponse> aggregations = new LinkedHashMap<>();
+        Map<String, AggregationResponse> aggregations;
 
-        switch (reportType.toLowerCase()) {
-            case "weekly":
-                reportingHelper.getWeeklyAggregations(parsedStartDate, parsedEndDate, aggregations);
+        switch (reportType) {
+            case WEEKLY:
+                aggregations = reportingHelper.getWeeklyAggregations(parsedStartDate, parsedEndDate);
                 break;
-            case "monthly":
-                reportingHelper.getMonthlyAggregations(parsedStartDate, parsedEndDate, aggregations);
+            case MONTHLY:
+                aggregations = reportingHelper.getMonthlyAggregations(parsedStartDate, parsedEndDate);
                 break;
-            case "yearly":
-                reportingHelper.getYearlyAggregations(parsedStartDate, parsedEndDate, aggregations);
+            case YEARLY:
+                aggregations = reportingHelper.getYearlyAggregations(parsedStartDate, parsedEndDate);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid report type: " + reportType);

@@ -16,8 +16,6 @@ public interface TransactionsRepo extends MongoRepository<Transactions, String >
 
     List<Transactions> findByType(String transactionType);
 
-    //List<Transactions> findByDate(Date date);
-
     List<Transactions> findByDateBetween(Date startDate, Date endDate);
 
 }
